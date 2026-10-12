@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>HYPERX STORE</title>
+<style>
+*{box-sizing:border-box}
+body{
+ margin:0;background:#080808;color:#f5f5f5;
+ font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif
+}
+header{
+ padding:38px 20px 30px;text-align:center;
+ background:radial-gradient(ellipse at top,#4b1010,#111 65%,#080808);
+ border-bottom:1px solid #382020
+}
+.logo{font-size:36px;font-weight:900;font-style:italic;letter-spacing:2px}
+.logo span{color:#ff3434}
+.sub{color:#aaa;font-size:11px;letter-spacing:4px;margin-top:8px}
+main{max-width:650px;margin:24px auto;padding:0 15px}
+.card{
+ background:linear-gradient(145deg,#191619,#0e0d10);
+ border:1px solid #30252a;border-radius:24px;
+ padding:22px;margin-bottom:22px;
+ box-shadow:0 12px 35px #0008
+}
+.label{font-size:12px;letter-spacing:3px;color:#bbb;font-weight:800}
+h1{font-size:34px;margin:12px 0}
+p{color:#aaa;line-height:1.7;font-size:14px}
+textarea{
+ width:100%;height:175px;background:#09090b;color:#eee;
+ border:1px solid #383238;border-radius:15px;padding:16px;
+ font:13px monospace;resize:vertical;margin:12px 0 18px;outline:none;
+}
+textarea:focus{border-color:#ff3434}
+.buttons{display:flex;gap:10px}
+button{
+ flex:1;padding:16px 8px;border-radius:14px;
+ border:1px solid #444;background:#171518;color:white;
+ font-size:15px;font-weight:800;cursor:pointer
+}
+button.primary{background:#f4f4f4;color:#111;border:0}
+button:active{transform:scale(.98)}
+.statusrow{display:flex;justify-content:space-between;gap:8px;
+ flex-wrap:wrap;margin-top:20px;color:#aaa;font-size:12px}
+.pill{border:1px solid #393239;padding:9px 11px;border-radius:30px}
+.dot{color:#ff4242}
+.resulthead{display:flex;justify-content:space-between;align-items:center}
+.badge{background:#f3f3f3;color:#111;border-radius:30px;padding:9px 18px;font-weight:800}
+.resultbox{border:1px dashed #484048;border-radius:18px;padding:22px;margin-top:20px;min-height:145px}
+.resultbox h2{margin-bottom:8px}
+footer{text-align:center;color:#777;font-size:11px;padding:20px;letter-spacing:2px}
+</style>
+</head>
+<body>
+<header>
+ <div class="logo">HYPERX <span>STORE</span></div>
+ <div class="sub">PREMIUM GAMING SERVICE</div>
+</header>
+
+<main>
+ <section class="card">
+  <div class="label">HYPERX STORE EDITION</div>
+  <h1>Activate UID</h1>
+  <p>วาง JSON ข้อมูล Guest เพื่อผูกระบบ</p>
+
+  <div class="label">JSON INPUT</div>
+  <textarea id="json" placeholder='{"guest_account_info":{"com.garena.msdk.guest_uid":"xxxx","com.garena.msdk.guest_password":"xxxx"}}'></textarea>
+
+  <div class="buttons">
+   <button class="primary" onclick="activate()">⚡ Activate</button>
+   <button onclick="deactivate()">Deactivate</button>
+  </div>
+
+  <div class="statusrow">
+   <span class="pill">🌐 IP: <span id="ip">กำลังโหลด...</span></span>
+   <span class="pill">⚡ Proxy <span class="dot">●</span> Ready</span>
+  </div>
+ </section>
+
+ <section class="card">
+  <div class="resulthead">
+   <div class="label">RESULT</div>
+   <span class="badge" id="badge">Ready</span>
+  </div>
+  <div class="resultbox">
+   <div style="font-size:25px">ⓘ</div>
+   <h2 id="title">พร้อมใช้งาน</h2>
+   <p id="message">กรุณากรอก JSON และกด Activate</p>
+  </div>
+ </section>
+</main>
+
+<footer>MADE BY SAVAGEWIZARD · HYPERX STORE</footer>
+
+<script>
+fetch('https://api.ipify.org?format=json')
+    .then(res => res.json())
+    .then(data => { document.getElementById('ip').textContent = data.ip; })
+    .catch(() => { document.getElementById('ip').textContent = 'ไม่ทราบไอพี'; });
+
+function show(status,title,message){
+ document.getElementById('badge').textContent=status;
+ document.getElementById('title').textContent=title;
+ document.getElementById('message').textContent=message;
+}
+
+function activate(){
+ const value=document.getElementById('json').value.trim();
+ if(!value){
+  show('Waiting','กรุณาใส่ JSON','ช่องข้อมูลยังว่างอยู่');
+  return;
+ }
+ try{
+  JSON.parse(value);
+  show('Success','เปิดใช้งานสำเร็จ','ระบบตรวจสอบรูปแบบ JSON เรียบร้อยแล้ว');
+ }catch(e){
+  show('Error','JSON ไม่ถูกต้อง','รูปแบบไม่ถูกต้อง ตรวจสอบเครื่องหมายปีกกาอีกครั้ง');
+ }
+}
+
+function deactivate(){
+ show('Stopped','ปิดการใช้งานแล้ว','ล้างค่าสถานะเรียบร้อย');
+}
+</script>
+</body>
+</html>
